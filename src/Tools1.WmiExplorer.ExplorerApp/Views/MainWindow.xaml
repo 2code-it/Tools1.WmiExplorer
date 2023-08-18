@@ -1,0 +1,79 @@
+﻿<Window x:Class="Tools1.WmiExplorer.ExplorerApp.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Tools1.WmiExplorer.ExplorerApp"
+	   xmlns:views="clr-namespace:Tools1.WmiExplorer.ExplorerApp.Views"
+        mc:Ignorable="d"
+        Title="Wmi Explorer" Height="450" MinWidth="740"
+	   DataContext="{Binding [MainWindowViewModel], Source={StaticResource viewModelLocator}}"
+	   >
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30" />
+			<RowDefinition Height="3*" />
+			<RowDefinition Height="4" />
+			<RowDefinition Height="1*" />
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
+			<TextBlock Style="{StaticResource throbber1}" Margin="4" Width="60" IsEnabled="{Binding IsLoading}" />
+			<Label Content="Host name" Margin="2" Style="{StaticResource control1}"/>
+			<TextBox Text="{Binding HostName}" Style="{StaticResource control1}" Width="160" />
+			<Label Content="User name" Margin="10,2,2,2" Style="{StaticResource control1}"/>
+			<TextBox Text="{Binding LogonUserName}" Style="{StaticResource control1}" Width="160" />
+			<Label Content="User password" Margin="10,2,2,2" Style="{StaticResource control1}"/>
+			<PasswordBox Style="{StaticResource control1}" Width="160" x:Name="pass1" />
+			<CheckBox Content="Enable Privileges" IsChecked="{Binding EnablePrivileges}" Style="{StaticResource control1}" />
+			<Button Content="Update" Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=pass1}" Width="80" Margin="4" />
+		</StackPanel>
+
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="4"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="4"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="4"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+			<DockPanel Grid.Column="0">
+				<TextBox Grid.Column="0" DockPanel.Dock="Top" Text="{Binding NamespacesFilter, UpdateSourceTrigger=PropertyChanged}" Margin="2" Tag="Namespaces filter.." />
+				<ListView Margin="2" DisplayMemberPath="Name" SelectionMode="Single" ItemsSource="{Binding Namespaces}" SelectedItem="{Binding SelectedNamespace}" />
+			</DockPanel>
+
+			<GridSplitter Grid.Column="1" VerticalAlignment="Stretch" Width="4" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns"/>
+			<DockPanel Grid.Column="2">
+				<TextBox Grid.Column="0" DockPanel.Dock="Top" Text="{Binding ClassesFilter, UpdateSourceTrigger=PropertyChanged}" Margin="2" Tag="Classes filter.." />
+				<ListView Margin="2" DisplayMemberPath="Name" SelectionMode="Single" ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" />
+			</DockPanel>
+
+			<GridSplitter Grid.Column="3" VerticalAlignment="Stretch" Width="4" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" />
+			<DockPanel Grid.Column="4">
+				<TextBox Grid.Column="0" DockPanel.Dock="Top" Text="{Binding PropertiesFilter, UpdateSourceTrigger=PropertyChanged}" Margin="2" Tag="Properties filter.." />
+				<ListView Margin="2" DisplayMemberPath="Name" SelectionMode="Single" ItemsSource="{Binding Properties}" SelectedItem="{Binding SelectedProperty}" />
+			</DockPanel>
+
+			<GridSplitter Grid.Column="5" VerticalAlignment="Stretch" Width="4" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" />
+			<ScrollViewer Grid.Column="6" VerticalScrollBarVisibility="Auto">
+				<DockPanel>
+					<TextBlock DockPanel.Dock="Top" Text="{Binding SelectedNamespace.Name}" FontWeight="Bold" />
+					<TextBlock DockPanel.Dock="Top" Text="{Binding SelectedNamespace.Description}" TextWrapping="Wrap" />
+
+					<TextBlock DockPanel.Dock="Top" Text="{Binding SelectedClass.Name}" FontWeight="Bold" Margin="0,5,0,0"/>
+					<TextBlock DockPanel.Dock="Top" Text="{Binding SelectedClass.Description}" TextWrapping="Wrap" />
+
+					<TextBlock DockPanel.Dock="Top" Text="{Binding SelectedProperty.Name}" FontWeight="Bold" Margin="0,5,0,0" />
+					<TextBlock DockPanel.Dock="Top" Text="{Binding SelectedProperty.Description}" TextWrapping="Wrap" />
+				</DockPanel>
+			</ScrollViewer>
+		</Grid>
+
+		<GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Height="4" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows"/>
+
+		<views:LogView  Grid.Row="3" />
+
+	</Grid>
+</Window>
